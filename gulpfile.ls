@@ -16,11 +16,11 @@ require! \run-sequence
 source = require \vinyl-source-stream
 require! \watchify
 
-config = 
+config =
     minify: process.env.MINIFY == \true
 
 # stylus-config :: Boolean -> object
-stylus-config = (minify) -> 
+stylus-config = (minify) ->
     use: nib!
     import: <[nib]>
     compress: minify
@@ -34,7 +34,7 @@ gulp.task \build:examples:styles, ->
     .pipe gulp-connect.reload!
 
 # watch all the style files both in public/components directory & themes directory
-gulp.task \watch:examples:styles, -> 
+gulp.task \watch:examples:styles, ->
     gulp.watch <[./public/components/*.styl ./themes/*.styl]>, <[build:examples:styles]>
 
 # create a browserify Bundler
@@ -85,7 +85,7 @@ gulp.task \build:themes, ->
     .pipe gulp-stylus (stylus-config config.minify)
     .pipe gulp.dest \./themes
 
-gulp.task \watch:themes, -> 
+gulp.task \watch:themes, ->
     gulp.watch <[./themes/*.styl]>, <[build:themes]>
 
 gulp.task \build:src:scripts, ->
@@ -105,7 +105,7 @@ create-standalone-build = (minify, {file, directory}) ->
         .exclude \react
         .exclude \react-dom
         .exclude \react-dom-factories
-        .exclude \react-transition-group/CSSTransitionGroup
+        .exclude \react-transition-group/TransitionGroup
         .exclude \tether
         .transform browserify-shim
         .bundle!
@@ -142,10 +142,10 @@ gulp.task \build:src, <[build:themes build:src:scripts]>
 gulp.task \watch:src, <[watch:themes watch:src:scripts]>
 gulp.task \build:examples, <[build:examples:styles build:examples:scripts]>
 gulp.task \watch:examples, <[watch:examples:styles watch:examples:scripts]>
-gulp.task \default, -> run-sequence do 
+gulp.task \default, -> run-sequence do
     \build:src
     \watch:src
-    \build:examples:styles 
-    \watch:examples:styles 
+    \build:examples:styles
+    \watch:examples:styles
     \build-and-watch:examples:scripts
-    \dev:server 
+    \dev:server
